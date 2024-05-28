@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 
 interface Enano {
     id: number;
+    imagen: string;
     nombre: string;
     edad: number;
-    imagenUrl: string;
+    
     descripcion: string;
 }
 
@@ -21,7 +22,7 @@ const BuscarEnanos: React.FC = () => {
 
     const obtenerTodosLosEnanos = async () => {
         try {
-            const response = await fetch('http://localhost:3001/enanos', {
+            const response = await fetch('http://localhost:3001/enano', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,9 +47,9 @@ const BuscarEnanos: React.FC = () => {
         router.push(`/enano/${id}`);
     };
 
-    const filteredEnanos = enanos.filter((enano) =>
-        enano.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredEnanos = enanos
+        .filter((enano) => enano.nombre.toLowerCase().includes(searchQuery.toLowerCase()))
+        .slice(0, 20); // Display only the first 20 enanos
 
     return (
         <div style={{ backgroundColor: '#1c1c1c', color: '#fff', padding: '20px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -60,10 +61,10 @@ const BuscarEnanos: React.FC = () => {
                 onChange={handleSearchChange}
                 style={{ margin: '20px 0', padding: '10px', width: '80%', borderRadius: '5px', border: '1px solid #ccc' }}
             />
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', justifyContent: 'center' }}>
                 {filteredEnanos.map((enano) => (
-                    <div key={enano.id} style={{ margin: '10px', textAlign: 'center', cursor: 'pointer' }} onClick={() => handleEnanoClick(enano.id)}>
-                        <img src={enano.imagenUrl} alt={enano.nombre} style={{ width: '150px', height: '150px', borderRadius: '10px', objectFit: 'cover' }} />
+                    <div key={enano.id} style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => handleEnanoClick(enano.id)}>
+                        <img src={enano.imagen} alt={enano.nombre} style={{ width: '150px', height: '150px', borderRadius: '10px', objectFit: 'cover' }} />
                         <p style={{ marginTop: '10px', color: '#ff5722' }}>{enano.nombre}</p>
                     </div>
                 ))}
