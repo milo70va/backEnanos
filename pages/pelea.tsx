@@ -49,12 +49,13 @@ const PeleaDeEnanos: React.FC = () => {
     const iniciarPelea = async () => {
         console.log('Iniciando pelea...');
         try {
+            // Crear la pelea
             const response = await fetch(`http://localhost:3001/duelo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ enano1: enano1Id, enano2: enano2Id }),
+                body: JSON.stringify({ enano1Id, enano2Id }),
             });
     
             if (!response.ok) {
@@ -63,6 +64,20 @@ const PeleaDeEnanos: React.FC = () => {
     
             const data = await response.json();
             const idDelDuelo = data.id; // Obtener el ID del duelo desde la respuesta
+    
+            console.log('Pelea creada correctamente con ID:', idDelDuelo);
+    
+            // Inicializar la pelea
+            const initResponse = await fetch(`http://localhost:3001/duelo/finalizar/${idDelDuelo}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!initResponse.ok) {
+                throw new Error('Error al inicializar la pelea');
+            }
     
             console.log('Pelea iniciada correctamente');
     
@@ -75,6 +90,7 @@ const PeleaDeEnanos: React.FC = () => {
             console.error('Error al iniciar la pelea:', error);
         }
     };
+    
     
 
     
