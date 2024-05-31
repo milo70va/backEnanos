@@ -50,7 +50,7 @@ const InsertarEnano: React.FC = () => {
                 throw new Error('Error al insertar el enano');
             }
 
-            router.push('/'); // Redirect to home page or enano list page
+            router.push('/search'); // Redirect to home page or enano list page
         } catch (error) {
             console.error('Error al insertar el enano:', error);
         }
